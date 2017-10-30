@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <!--网站编码格式，UTF-8 国际编码，GBK或 gb2312 中文编码-->
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="关键词一，关键词二">
+  <meta name="Description" content="网站描述内容">
+  <title>Document</title>
+  <!--css js 文件的引入-->
+<style type="text/css">
+*{margin:0px;}
+/*宽度：300m;  属性：值;  px像素*/
+#gray{width:100%;/*宽*/ height:100%;/*高*/ background:rgba(0,0,0,0.5);/*背景颜色*/ position:absolute; top:0px;
+		display:none;/*隐藏*/}
+#Login{width:600px; height:350px; background:#fff;position:absolute;/*绝对定位*/ 
+			left:400px; top:150px;display:none}
+#Login .title{width:600px;height:45px; background:#ff9933; color:#fff; font-size:18px; font-family:"微软雅黑";
+				line-height:45px;/*行高，文字竖直居中*/ text-indent:35px;/*首行缩进*/ cursor:move;}
+#Login .title a{ font-size:24px; text-decoration:none;/*去掉下划线*/ float:right;/*右浮动*/ 
+				/*border:1px solid blue;边框*/ margin-right:10px; color:#ddd;}
+#Login .title a:hover{color:#fff;}
+#Login p.info{font-size:14px; font-family:"微软雅黑"; color:#666;  margin:20px;}
+#Login #lg{width:315px;height:190px; margin:15px auto 0px;}
+
+#lg p{font-size:16px;font-family:"微软雅黑";margin-bottom:15px;}
+#lg p input.txt{width:260px;height:35px;border:1px solid #ddd;/*粗细 风格 颜色*/ border-radius:3px; }
+#lg p input.but{width:263px; height:40px; background:url("images/but_bg1.jpg"); border:0px; margin-left:40px;}
+</style>
+ </head>
+
+
+ <body>
+ <span class="xs">登录</span>
+<!-- id="名字" 相当于现实当中　姓名＝＂张三”-->
+<div id="gray"></div>
+
+<div id="Login">
+	<div class="title" id='title'>用户登录 <a href="#" class='close'>X</a></div>
+	<p class='info'><img src="images/new.png" width='40' height='40' align='absmiddle'/>Movebox</p>
+	<div id="lg">
+	<form>
+		<p>账号	<input type="text" class='txt'/></p>
+		<p>密码	<input type="text" class='txt'/></p>
+		<p><input type="submit" class="but" value=''/></p>
+	</form>
+	</div>
+</div>
+
+
+<!--引用外部Jquery文件-->
+<script type="text/javascript" src="js/jquery.js"></script>	
+<script type="text/javascript">
+	//点击登录显示功能
+	$("span.xs").click(function(){
+		$("#gray").show();//显示
+		$("#Login").show();//显示
+		tc_center();
+	});
+
+	//点击关闭按扭，关闭功能
+	$("a.close").click(function(){
+		$("#gray").hide();//隐藏
+		$("#Login").hide();//隐藏
+	});
+
+
+	//当动态改变浏览器窗口时，也要水平距中
+	$(window).resize(function(){
+		tc_center();	
+	});
+
+	function tc_center(){
+		var _top=($(window).height()-$("#Login").height())/2;
+		var _left=($(window).width()-$("#Login").width())/2;
+
+		//改变Top的值
+		$("#Login").css({top:_top,left:_left});
+	}
+</script>
+
+<script type="text/javascript">
+	window.onload = function(){
+			init(document.getElementById("title"));//记得初始化
+		};
+		
+		var l = 0,t=0,x=0,y=0;
+		var isOver = false;
+		var zindex = 3;
+		 parentDom = null;
+		 thisDom = null;
+		function init(titleDom){
+			//tm_center(divObj);//居中事件
+			/*第一种*/
+			var thisDom = titleDom;//获取当前title对象
+			parentDom = thisDom.parentNode;//获取当前title对应的div
+			titleDom.onmousedown = function(event){//1111开始
+				var e = event || window.event;//为了兼容ie和火狐
+				x = e.clientX;//鼠标所在的x坐标
+				y = e.clientY;//鼠标所在的y坐标
+				
+				l = parseInt(parentDom.offsetLeft);//距离浏览器左边的位置left
+				t = parseInt(parentDom.offsetTop);//距离浏览器顶部的位置top
+				isOver = true;//定义拖动标识,防止卡顿
+				zindex++;
+				parentDom.style.zIndex = zindex;
+
+
+
+			};///111结束
+		};
+		document.onmouseup = function(event){
+					if(isOver){
+						isOver = false;//还原标识
+					}
+				};//鼠标松开的事件
+		document.onmousemove = function(event){
+					if(isOver){
+						var e = event || window.event;//为了兼容ie和火狐
+						var newLeft = l + e.clientX - x;//新的左边距
+						var newTop = t + e.clientY - y;//新的顶部边距
+						parentDom.style.left = newLeft+"px";
+						parentDom.style.top = newTop+"px";
+					}
+
+				}; //鼠标移动的事件
+</script>
+
+
+
+<!--
+
+	1、如何在页面当中构建一个有宽度，高度的长方形容器（div盒子模型）
+	2、盒子宽度和高度设置为百分比时，他不见了,处理方法是，给他加上　 position:absolute;
+	3、讲到了外边距的概念margin ,同时还解决了外边距的兼容问题 *{margin:0px;}
+	4、构建登录界面 ，利用绝对定位来控制这个长方形的位置
+	5、构建一个小的长方形做标题部分，然后控制里面文字样式（颜色，大小，字体，竖直居中，文字与左边间距-首行缩进）
+	6、如何在页面当中，插入一张图片 <img src="地址" />
+	7、利用外边距来控制下面表单元素的位置  margin: 上(15px) 左右(auto) 下(0px); 
+	8、如何在页面当中，插入一张背景图片 background:url('地址');
+-->
+
+ </body>
+
+</html>
